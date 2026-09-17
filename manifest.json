@@ -3,8 +3,8 @@
   "short_name": "동탄11남 기도수첩",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#F8FAFC",
-  "theme_color": "#1E3A8A",
+  "background_color": "#F3F7FA",
+  "theme_color": "#2563EB",
   "icons": [
     {
       "src": "icon-app.png",
