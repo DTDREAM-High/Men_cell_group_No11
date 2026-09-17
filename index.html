@@ -166,11 +166,14 @@
     }
 
     .badge-today {
-      font-size: 10px; font-weight: 700; color: #FFF;
-      background-color: var(--primary); padding: 2px 6px; border-radius: 4px;
-      white-space: nowrap;
-    }
-
+  background: #FEF3C7;       /* 연한 앰버 골드 배경 */
+  color: #92400E;            /* 또렷한 진한 브라운 글씨 */
+  border: 1px solid #FCD34D;  /* 명확한 테두리 */
+  font-weight: 700;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
     .skeleton-card {
       background: #EAE5DE;
       border-radius: 12px;
@@ -532,94 +535,104 @@
     return card;
   }
 
-  function showDetailView(index) {
+// 글로벌 상태 변수 추가 (기존 변수 선언 위치에 함께 작성)
+let isTodayOnlyMode = false;
+let currentTodayIndex = 0;
+
+function showDetailView(index, isFromTodaySection = false) {
+  isTodayOnlyMode = isFromTodaySection;
+
+  if (isTodayOnlyMode) {
+    // 오늘의 기도 가족 목록(3명) 기준 인덱스 설정
+    currentTodayIndex = index;
+    const name = todayMemberNames[currentTodayIndex];
+    currentMemberIndex = orderedMemberList.indexOf(name);
+  } else {
+    // 전체 명단 기준 인덱스 설정
     currentMemberIndex = index;
-    const name = orderedMemberList[currentMemberIndex];
-    const isLeader = rolesMap[name] === '순장';
+  }
 
-    const iconSvg = isLeader 
-      ? `<svg viewBox="0 0 24 24" style="fill:var(--leader-gold); stroke:var(--leader-gold); stroke-width:1;"><path d="M12 2l3.09 6.26 6.91 1.01-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
-      : `<svg viewBox="0 0 24 24" style="stroke:var(--primary); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
-    
-    memberDetailName.innerHTML = `${iconSvg} ${name} ${isLeader ? '순장' : '순원'}`;
-    
-    const prayers = prayerData[name] || [];
-    
-    const urgentItems = prayers.filter(p => p.status === 'urgent' || p.status === '우선');
-    const normalPrayers = prayers.filter(p => p.status !== 'urgent' && p.status !== '우선');
+  const name = orderedMemberList[currentMemberIndex];
+  const isLeader = rolesMap[name] === '순장';
 
-    const groups = {};
-    normalPrayers.forEach(p => {
-      const gName = p.group || "기도제목";
-      if (!groups[gName]) groups[gName] = [];
-      groups[gName].push(p);
+  const iconSvg = isLeader 
+    ? `<svg viewBox="0 0 24 24" style="fill:var(--leader-gold); stroke:var(--leader-gold); stroke-width:1;"><path d="M12 2l3.09 6.26 6.91 1.01-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
+    : `<svg viewBox="0 0 24 24" style="stroke:var(--primary); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+  
+  memberDetailName.innerHTML = `${iconSvg} ${name} ${isLeader ? '순장' : '순원'}`;
+  
+  const prayers = prayerData[name] || [];
+  const urgentItems = prayers.filter(p => p.status === 'urgent' || p.status === '우선');
+  const normalPrayers = prayers.filter(p => p.status !== 'urgent' && p.status !== '우선');
+
+  const groups = {};
+  normalPrayers.forEach(p => {
+    const gName = p.group || "기도제목";
+    if (!groups[gName]) groups[gName] = [];
+    groups[gName].push(p);
+  });
+
+  prayerContainer.innerHTML = '';
+
+  if (urgentItems.length > 0) {
+    const urgentGroupEl = document.createElement('div');
+    urgentGroupEl.className = 'prayer-group is-urgent';
+    let urgentHTML = `<div class="group-tag urgent-tag">🚨 우선 기도</div>`;
+    urgentItems.forEach(p => {
+      urgentHTML += `
+        <div class="prayer-item">
+          <div class="prayer-title-row">
+            <div class="prayer-title" style="color: var(--urgent-red);">${p.title || '우선 기도제목'}</div>
+          </div>
+          <div class="prayer-detail">${p.detail}</div>
+        </div>
+      `;
     });
+    urgentGroupEl.innerHTML = urgentHTML;
+    prayerContainer.appendChild(urgentGroupEl);
+  }
 
-    prayerContainer.innerHTML = '';
-
-    if (urgentItems.length > 0) {
-      const urgentGroupEl = document.createElement('div');
-      urgentGroupEl.className = 'prayer-group is-urgent';
-
-      let urgentHTML = `<div class="group-tag urgent-tag">🚨 우선 기도</div>`;
-      urgentItems.forEach(p => {
-        urgentHTML += `
+  Object.keys(groups).forEach(gName => {
+    const groupEl = document.createElement('div');
+    groupEl.className = 'prayer-group';
+    let itemsHTML = `<div class="group-tag">📌 ${gName}</div>`;
+    groups[gName].forEach(p => {
+      const isDone = p.status === 'done' || p.status === '완료' || p.status === '응답완료';
+      if (isDone) {
+        itemsHTML += `
+          <div class="prayer-item is-done">
+            <div class="prayer-title-row accordion-header" onclick="toggleAccordion(this)">
+              <div class="prayer-title">${p.title || gName}</div>
+              <div class="badge-done-container">
+                <span class="badge-done">✓ 응답완료</span>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="prayer-detail">${p.detail}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        itemsHTML += `
           <div class="prayer-item">
             <div class="prayer-title-row">
-              <div class="prayer-title" style="color: var(--urgent-red);">${p.title || '우선 기도제목'}</div>
+              <div class="prayer-title">${p.title || gName}</div>
             </div>
             <div class="prayer-detail">${p.detail}</div>
           </div>
         `;
-      });
-      urgentGroupEl.innerHTML = urgentHTML;
-      prayerContainer.appendChild(urgentGroupEl);
-    }
-
-    Object.keys(groups).forEach(gName => {
-      const groupEl = document.createElement('div');
-      groupEl.className = 'prayer-group';
-
-      let itemsHTML = `<div class="group-tag">📌 ${gName}</div>`;
-      groups[gName].forEach(p => {
-        const isDone = p.status === 'done' || p.status === '완료' || p.status === '응답완료';
-        
-        if (isDone) {
-          itemsHTML += `
-            <div class="prayer-item is-done">
-              <div class="prayer-title-row accordion-header" onclick="toggleAccordion(this)">
-                <div class="prayer-title">${p.title || gName}</div>
-                <div class="badge-done-container">
-                  <span class="badge-done">✓ 응답완료</span>
-                  <svg class="arrow-icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-                </div>
-              </div>
-              <div class="accordion-content">
-                <div class="prayer-detail">${p.detail}</div>
-              </div>
-            </div>
-          `;
-        } else {
-          itemsHTML += `
-            <div class="prayer-item">
-              <div class="prayer-title-row">
-                <div class="prayer-title">${p.title || gName}</div>
-              </div>
-              <div class="prayer-detail">${p.detail}</div>
-            </div>
-          `;
-        }
-      });
-
-      groupEl.innerHTML = itemsHTML;
-      prayerContainer.appendChild(groupEl);
+      }
     });
+    groupEl.innerHTML = itemsHTML;
+    prayerContainer.appendChild(groupEl);
+  });
 
-    tempCard.style.display = 'none';
-    mainView.style.display = 'none';
-    detailView.style.display = 'flex';
-    window.scrollTo(0, 0);
-  }
+  tempCard.style.display = 'none';
+  mainView.style.display = 'none';
+  detailView.style.display = 'flex';
+  window.scrollTo(0, 0);
+}
 
   function toggleAccordion(headerEl) {
     headerEl.classList.toggle('open');
@@ -633,13 +646,49 @@
     tempCard.style.display = 'block';
   }
 
-  function navigateMember(direction) {
+function createMemberCard(name, isLeader, roleText, hasUrgent, isTodayCard = false, isTodayMark = false) {
+  const globalIndex = orderedMemberList.indexOf(name);
+  const todayIndex = todayMemberNames.indexOf(name);
+  const card = document.createElement('div');
+  
+  card.className = `member-card ${isTodayCard ? 'today-highlight' : ''} ${isLeader ? 'is-leader' : ''}`;
+  
+  // 오늘의 기도 가족 카드 클릭 시에는 todayIndex와 true를 넘겨줍니다.
+  if (isTodayCard) {
+    card.onclick = () => showDetailView(todayIndex, true);
+  } else {
+    card.onclick = () => showDetailView(globalIndex, false);
+  }
+  
+  card.innerHTML = `
+    <div class="member-info">
+      <span class="member-name">${name}</span>
+      <div class="member-tags">
+        ${isLeader ? `<span class="badge-role">${roleText}</span>` : ''}
+        ${hasUrgent ? `<span class="badge-urgent-card">우선</span>` : ''}
+        ${(isTodayCard || isTodayMark) ? `<span class="badge-today">오늘</span>` : ''}
+      </div>
+    </div>
+    <span class="member-count">${prayerData[name] ? prayerData[name].length : 0}개</span>
+  `;
+  return card;
+}
+
+function navigateMember(direction) {
+  if (isTodayOnlyMode) {
+    // 오늘 지정된 3명 안에서만 순환
+    currentTodayIndex += direction;
+    if (currentTodayIndex < 0) currentTodayIndex = todayMemberNames.length - 1;
+    if (currentTodayIndex >= todayMemberNames.length) currentTodayIndex = 0;
+    showDetailView(currentTodayIndex, true);
+  } else {
+    // 전체 회원 명단에서 순환
     currentMemberIndex += direction;
     if (currentMemberIndex < 0) currentMemberIndex = orderedMemberList.length - 1;
     if (currentMemberIndex >= orderedMemberList.length) currentMemberIndex = 0;
-    showDetailView(currentMemberIndex);
+    showDetailView(currentMemberIndex, false);
   }
-
+}
   function toggleFontSize() {
     isLargeFont = !isLargeFont;
     document.body.classList.toggle('font-large', isLargeFont);
