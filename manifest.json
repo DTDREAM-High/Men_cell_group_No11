@@ -3,7 +3,7 @@
   "short_name": "동탄11남 기도수첩",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#F8FAFC",
+  "background_color": "#Ffffff",
   "theme_color": "#1E40AF",
   "icons": [
     {
