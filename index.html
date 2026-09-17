@@ -6,30 +6,30 @@
   <title>동탄드림교회 동탄11남 다락방 기도수첩</title>
   
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" href="#E87A5D">
+  <meta name="theme-color" href="#1E3048">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" href="#2563EB">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-  /* 따뜻하고 편안한 웜 블루 테마 */
-  --primary: #3B82F6;          /* 따뜻한 분위기의 웜 블루 */
-  --primary-light: #EFF6FF;    /* 포근한 스카이 블루 배경 */
-  --bg: #F3F7FA;               /* 온기가 도는 연한 배경 */
-  --card-bg: #FFFFFF;
+  /* 4050 차분한 딥 슬레이트 테마 */
+  --primary: #2C4A6F;          /* 묵직하고 신뢰감을 주는 딥 블루 */
+  --primary-light: #EEF2F6;    /* 은은하고 차분한 하이라이트 배경 */
+  --bg: #F1F4F8;               /* 눈이 편안한 차콜 톤 배경 */
+  --card-bg: #FFFFFF;          
   
-  --text-main: #1E293B;        /* 인디고 딥 네이비 */
-  --text-sub: #64748B;
+  --text-main: #1A2332;        /* 또렷한 가독성의 딥 텍스트 */
+  --text-sub: #5A6B82;         /* 차분한 슬레이트 그레이 */
   
-  --accent-green: #10B981;     /* 응답 완료 (에메랄드) */
-  --urgent-red: #EF4444;       /* 우선 기도 */
-  --urgent-bg: #FEF2F2;
-  --urgent-border: #FCA5A5;
-  --leader-gold: #F59E0B;       /* 순장 표시 (따뜻한 앰버/골드) */
+  /* 상태 및 포인트 컬러 (톤다운) */
+  --accent-green: #2E7D32;     /* 톤다운된 그린 (응답 완료) */
+  --urgent-red: #C62828;       /* 톤다운된 무거운 레드 (우선 기도) */
+  --urgent-bg: #FFEBEE;
+  --urgent-border: #EF9A9A;
+  --leader-gold: #B45309;       /* 차분한 브라운 골드 (순장 표시) */
   --leader-bg: #FEF3C7;
   
   --radius: 16px;
@@ -302,16 +302,15 @@
   <div class="view-section" id="main-view">
     <!-- 오늘의 기도 대상 (3명) -->
     <div class="section-label today-label">
-      <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> 오늘의 기도 순원 (3명)
+      <svg viewBox="0 0 24 24" style="fill: currentColor; stroke: none;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+  오늘 다락방에서 함께 기도할 가족입니다.
     </div>
     <div class="today-grid" id="today-grid"></div>
 
     <!-- 전체 다락방 식구 -->
-    <div class="section-label today-label">
-    <!-- 채워진 하트 아이콘 -->
-    <svg viewBox="0 0 24 24" style="fill: currentColor; stroke: none;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-  오늘 다락방에서 함께 기도할 가족입니다.
-  </div>
+    <div class="section-label">
+      <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 전체 다락방 식구
+    </div>
     <div class="member-grid" id="member-grid"></div>
   </div>
 
