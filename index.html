@@ -15,26 +15,25 @@
 
   <style>
     :root {
-  /* 4050 차분한 딥 슬레이트 테마 */
-  --primary: #2C4A6F;          /* 묵직하고 신뢰감을 주는 딥 블루 */
-  --primary-light: #EEF2F6;    /* 은은하고 차분한 하이라이트 배경 */
-  --bg: #F1F4F8;               /* 눈이 편안한 차콜 톤 배경 */
+  /* 세련된 모던 딥 인디고 테마 */
+  --primary: #1E40AF;          /* 진하고 고급스러운 인디고 블루 */
+  --primary-light: #EFF6FF;    /* 오늘 카드 등 강조 배경 */
+  --bg: #F8FAFC;               /* 트렌디하고 깨끗한 배경 */
   --card-bg: #FFFFFF;          
   
-  --text-main: #1A2332;        /* 또렷한 가독성의 딥 텍스트 */
-  --text-sub: #5A6B82;         /* 차분한 슬레이트 그레이 */
+  --text-main: #0F172A;        /* 선명한 딥 다크 네이비 */
+  --text-sub: #64748B;         /* 차분하고 세련된 슬레이트 그레이 */
   
-  /* 상태 및 포인트 컬러 (톤다운) */
-  --accent-green: #2E7D32;     /* 톤다운된 그린 (응답 완료) */
-  --urgent-red: #C62828;       /* 톤다운된 무거운 레드 (우선 기도) */
-  --urgent-bg: #FFEBEE;
-  --urgent-border: #EF9A9A;
-  --leader-gold: #B45309;       /* 차분한 브라운 골드 (순장 표시) */
+  /* 포인트 및 상태 컬러 */
+  --accent-green: #059669;     /* 응답 완료 (클린 에메랄드) */
+  --urgent-red: #DC2626;       /* 우선 기도 (세련된 레드) */
+  --urgent-bg: #FEF2F2;
+  --urgent-border: #FCA5A5;
+  --leader-gold: #D97706;       /* 순장 표시 (모던 앰버) */
   --leader-bg: #FEF3C7;
   
   --radius: 16px;
 }
-
     * {
       box-sizing: border-box;
       margin: 0; padding: 0;
@@ -96,10 +95,33 @@
     .progress-bar-bg { width: 100%; height: 8px; background-color: #EFE8E1; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #F3A683, var(--primary)); width: 5%; border-radius: 4px; transition: width 0.5s ease; }
     .btn-pray-today {
-      width: 100%; padding: 11px; border: none; border-radius: 10px;
-      background-color: var(--primary); color: white; font-size: 15px; font-weight: 700;
-      display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
-    }
+  width: 100%;
+  padding: 16px;
+  margin-top: 16px;
+  background: #1E40AF;       /* 세련된 모던 딥 블루 */
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-pray-today:active {
+  transform: scale(0.98);
+}
+
+/* 기도를 완료했을 때 변하는 스타일 */
+.btn-pray-today.completed {
+  background: #059669;       /* 세련된 에메랄드 그린 */
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+}
     .btn-pray-today svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; }
 
     .view-section { padding: 0 20px 30px; flex: 1; }
@@ -166,12 +188,12 @@
     }
 
     .badge-today {
-  background: #FEF3C7;       /* 연한 앰버 골드 배경 */
-  color: #92400E;            /* 또렷한 진한 브라운 글씨 */
-  border: 1px solid #FCD34D;  /* 명확한 테두리 */
+  background: #DBEAFE;       /* 은은하고 트렌디한 파스텔 블루 */
+  color: #1E40AF;            /* 또렷한 딥 블루 글씨 */
+  border: 1px solid #BFDBFE;  
   font-weight: 700;
   font-size: 11px;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 6px;
 }
     .skeleton-card {
